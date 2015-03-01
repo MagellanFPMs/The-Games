@@ -4,7 +4,7 @@
 # Script d'installation des serveurs jeux du Games
 # 
 # version 1.1 
-# 15/02/2015 
+# 20/02/2015 
 # 
 # Auteur : Touffu - zero.sur.zero@gmail.com
 # 
