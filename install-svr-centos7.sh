@@ -43,6 +43,8 @@ utUsers=(user user)
 utProgs=(prog)
 utPassword=(password)
 
+$url="http://..."
+
 # ################################
 # NE PAS MODIFIER A PARTIR D'ICI !
 # ################################
@@ -82,7 +84,7 @@ function install() #étape 2
 	echo -en "\n### AUTRES ###\n"
 	yum -y install less man vim-enhanced screen  unzip htop fish bzip2 #bind-utils rsync
 	yum -y install expect #pour les mots de passe
-	wget -O /etc/issue.net  url/issue.net #--no-check-certificate
+	wget -O /etc/issue.net  $url/issue.net #--no-check-certificate
 
 	echo -en "\n### NTP ###\n"
 
@@ -91,7 +93,7 @@ function install() #étape 2
 	
 	echo -en "\n### SSH ###\n"
 	yum -y install openssh-clients 
-	wget -O /etc/ssh/sshd_config  url/sshd_config
+	wget -O /etc/ssh/sshd_config  $url/sshd_config
 	chmod 600 /etc/ssh/sshd_config
 	chkconfig sshd on
 	service sshd restart
@@ -103,9 +105,9 @@ function install() #étape 2
 	yum -y install nrpe nagios-plugins nagios-plugins-check-updates nagios-plugins-disk nagios-plugins-load nagios-plugins-users nagios-plugins-procs nagios-plugins-swap
 	ARCH=$(uname -m)
 	if [ ${ARCH} == 'x86_64' ]; then
-  		wget -O /etc/nagios/nrpe.cfg  url/nrpe64.cfg
+  		wget -O /etc/nagios/nrpe.cfg  $url/nrpe64.cfg
 	else
-  		wget -O /etc/nagios/nrpe.cfg  url/nrpe32.cfg
+  		wget -O /etc/nagios/nrpe.cfg  $url/nrpe32.cfg
 	fi
 	firewall-cmd --zone=public --add-port=5666/tcp --permanent
 	firewall-cmd --reload
@@ -114,7 +116,7 @@ function install() #étape 2
 	
 	echo -en "\n### SNMP ###\n"
 	yum -y install net-snmp
-	wget -O /etc/snmp/snmpd.conf  url/snmpd.conf
+	wget -O /etc/snmp/snmpd.conf  $url/snmpd.conf
 	firewall-cmd --zone=public --add-port=161/udp --permanent
  	firewall-cmd --reload
 	chkconfig snmpd on
@@ -140,8 +142,7 @@ function config()
 	echo -en "\n####################" 
 	echo -en "\n"
 	echo -en "\n### SELINUX ###\n"
-	wget -O /etc/seliman nux/config url/selinux.config
-	echo 0 > /selinux/enforce
+	sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
 }
 function createRealUser()
 {
@@ -160,7 +161,7 @@ function createRealUser()
 		passwd -fu $name
 		usermod -G wheel $name
 		mkdir /home/$name/.ssh/
-		wget -O /home/$name/.ssh/authorized_keys  url/users/$name
+		wget -O /home/$name/.ssh/authorized_keys  $url/users/$name
 		chown -R $name:$name /home/$name/.ssh/
 		chmod 700 /home/$name/.ssh/
 		chmod 600 /home/$name/.ssh/authorized_keys
@@ -308,7 +309,7 @@ ll		users=("${adminsUsers[*]}")
 	7)
 		echo -en ""
 		read -p "Entrer le pseudo de l'utilisateur : " theUser
-		wget --no-check-certificate url/users/$theUser
+		wget --no-check-certificate $url/users/$theUser
 		if [ $? != 0 ]; then 
 			echo "Pas de clé SSH sur hosting trouvée ... (/.../users)"
 			exit 0
