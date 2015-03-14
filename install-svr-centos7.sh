@@ -70,7 +70,7 @@ function repos() # étape 1
 	echo -en "\n### Fish ###\n"
 	yum -y install wget
 	wget -O /etc/yum.repos.d/shells:fish:release:2.repo http://download.opensuse.org/repositories/shells:fish:release:2/CentOS_7/shells:fish:release:2.repo
-	yum -y up
+	yum -y update
 }
 
 function install() #étape 2
