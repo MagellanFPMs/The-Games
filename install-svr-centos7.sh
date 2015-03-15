@@ -170,7 +170,6 @@ function createRealUser()
 }
 function createProgUser()
 {
-	i
 	for prog in $progs
 	do
 		echo -en "\n### $prog ###\n"
