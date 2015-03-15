@@ -43,7 +43,7 @@ utUsers=(user user)
 utProgs=(prog)
 utPassword=(password)
 
-$url="http://..."
+url="http://..."
 
 # ################################
 # NE PAS MODIFIER A PARTIR D'ICI !
